@@ -6,7 +6,7 @@ To run the solver, navigate to the code directory and use the following command 
 
 `python code/main.py -inst <filename> -alg [BnB|Approx|LS1|LS2] -time <cutoff in seconds> -seed <random seed>`
 
-1， -inst <filename>: Specifies the dataset file path relative to the DATASET directory. For example, small_scale/small_1.\\
+1. -inst <filename>: Specifies the dataset file path relative to the DATASET directory. For example, small_scale/small_1.\\
 
 2. -alg [BnB|Approx|LS1|LS2]: Selects the algorithm to solve the Knapsack problem. Choose one from BnB, Approx, LS1, or LS2.\\
 3. -time <cutoff in seconds>: Sets the maximum time in seconds that the algorithm is allowed to run.\\
