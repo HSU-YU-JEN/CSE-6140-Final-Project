@@ -1,76 +1,66 @@
-# local_search_1.py
 import random
-import argparse
 import time
 
-# Assuming utils.py contains necessary functions like load_dataset
-from utils.utils import load_dataset, save_solution, save_trace
-
 class LocalSearch1:
-    def __init__(self, items, capacity, seed, population_size=100, generations=100, mutation_rate=0.01):
+    def __init__(self, items, capacity, seed, population_size=10000, mutation_rate=0.01):
         random.seed(seed)
         self.items = items
         self.capacity = capacity
         self.population_size = population_size
-        self.generations = generations
         self.mutation_rate = mutation_rate
 
     def generate_individual(self):
-        return [random.randint(0, 1) for _ in range(len(self.items))]
+        """Generates a random individual based on the number of items."""
+        individual = []
+        for item in self.items:
+            if random.random() < 0.5:  # Adjust probability as necessary to improve initial feasibility
+                individual.append(1)
+            else:
+                individual.append(0)
+        return individual
 
     def fitness(self, individual):
-        value = sum(item['value'] * gene for item, gene in zip(self.items, individual))
-        weight = sum(item['weight'] * gene for item, gene in zip(self.items, individual))
-        if weight > self.capacity:
-            return 0  # Simple penalty
-        return value
+        """Calculates the fitness of an individual as its total value, penalizing those that exceed capacity."""
+        total_value = sum(item['value'] * gene for item, gene in zip(self.items, individual))
+        total_weight = sum(item['weight'] * gene for item, gene in zip(self.items, individual))
+        if total_weight > self.capacity:
+            return 0  
+        return total_value
 
-    def selection(self, population, fitnesses, k=3):
-        selected = random.choices(list(zip(population, fitnesses)), k=k)
-        return max(selected, key=lambda x: x[1])[0]
+    def selection(self, population, fitnesses):
+        """Selects parents for crossover based on their fitness."""
+        selected = random.choices(population, weights=fitnesses, k=2)
+        return selected
 
     def crossover(self, parent1, parent2):
+        """Performs a single point crossover between two parents."""
         point = random.randint(1, len(parent1) - 1)
         return parent1[:point] + parent2[point:], parent2[:point] + parent1[point:]
 
     def mutate(self, individual):
+        """Mutates an individual by flipping each gene with a probability equal to the mutation rate."""
         return [gene if random.random() > self.mutation_rate else 1-gene for gene in individual]
 
-    def solve(self):
-        population = [self.generate_individual() for _ in range(self.population_size)]
-        best_fitness_over_time = []
+    def solve(self, cut_off_time):
         start_time = time.time()
+        population = [self.generate_individual() for _ in range(self.population_size)]
+        trace = []
+        best_individual, best_fitness = None, -1
 
-        for generation in range(self.generations):
-            new_population = []
+        while time.time() - start_time < cut_off_time:
             fitnesses = [self.fitness(ind) for ind in population]
-            for _ in range(self.population_size // 2):  # Ensuring population size remains constant
-                parent1 = self.selection(population, fitnesses)
-                parent2 = self.selection(population, fitnesses)
-                offspring1, offspring2 = self.crossover(parent1, parent2)
-                new_population.append(self.mutate(offspring1))
-                new_population.append(self.mutate(offspring2))
+            new_population = []
+            for _ in range(self.population_size // 2):
+                parents = self.selection(population, fitnesses)
+                offspring1, offspring2 = self.crossover(parents[0], parents[1])
+                new_population.extend([self.mutate(offspring1), self.mutate(offspring2)])
+
             population = new_population
-            best_fitness = max(fitnesses)
-            best_fitness_over_time.append((time.time() - start_time, best_fitness))
+            current_best_fitness = max(fitnesses)
+            if current_best_fitness > best_fitness:
+                best_fitness = current_best_fitness
+                best_individual = population[fitnesses.index(best_fitness)]
+                trace.append((time.time() - start_time, best_fitness))
 
-        best_index = fitnesses.index(max(fitnesses))
-        return population[best_index], best_fitness_over_time
-
-def main(filename, cut_off_time, seed):
-    items, capacity = load_dataset(filename)
-    ga = LocalSearch1(items, capacity, seed)
-    best_solution, trace = ga.solve()
-
-    # Save the solution and trace according to the project specifications
-    save_solution(filename, 'LS1', cut_off_time, seed, best_solution)
-    save_trace(filename, 'LS1', cut_off_time, seed, trace)
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Genetic Algorithm for the Knapsack Problem")
-    parser.add_argument("-inst", type=str, required=True, help="Dataset filename")
-    parser.add_argument("-time", type=int, required=True, help="Cut-off time in seconds")
-    parser.add_argument("-seed", type=int, required=True, help="Random seed")
-    
-    args = parser.parse_args()
-    main(args.inst, args.time, args.seed)
+        solution = {'selected_items': best_individual, 'quality': best_fitness}
+        return solution, trace
