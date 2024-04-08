@@ -11,12 +11,16 @@ class LocalSearch1:
 
     def generate_individual(self):
         """Generates a random individual based on the number of items."""
-        individual = []
-        for item in self.items:
-            if random.random() < 0.5:  # Adjust probability as necessary to improve initial feasibility
-                individual.append(1)
-            else:
-                individual.append(0)
+        individual = [0] * len(self.items)
+        current_weight = 0
+        item_indices = list(range(len(self.items)))
+        random.shuffle(item_indices)  # Randomize the order of items to consider for adding
+
+        for index in item_indices:
+            item = self.items[index]
+            if current_weight + item['weight'] <= self.capacity:
+                individual[index] = 1
+                current_weight += item['weight']
         return individual
 
     def fitness(self, individual):
