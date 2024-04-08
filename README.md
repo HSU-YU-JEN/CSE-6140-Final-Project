@@ -14,5 +14,6 @@ To run the solver, navigate to the code directory and use the following command 
 
 4. -seed <random seed>: (Optional) Provides a seed for the random number generator. This is required for the local search algorithms (LS1 and LS2).
 
-Examples:\\
+Examples:
+
 `python code/main.py -inst small_scale/small_1 -alg LS1 -time 10 -seed 42`
