@@ -32,7 +32,10 @@ def save_solution(filename, method, cutoff, seed, solution):
     os.makedirs(full_path, exist_ok=True)
 
     # Construct the full path for the solution file
-    sol_filename = os.path.join(full_path, f"{os.path.basename(filename)}_{method}_{cutoff}_{seed}.sol")
+    if method in ['BnB', 'Approx']:
+        sol_filename = os.path.join(full_path, f"{os.path.basename(filename)}_{method}_{cutoff}.sol")
+    else:
+        sol_filename = os.path.join(full_path, f"{os.path.basename(filename)}_{method}_{cutoff}_{seed}.sol")
 
     # Write the solution file
     with open(sol_filename, 'w') as f:
@@ -52,7 +55,10 @@ def save_trace(filename, method, cutoff, seed, trace):
     os.makedirs(full_path, exist_ok=True)
 
     # Construct the full path for the solution file
-    trace_filename = os.path.join(full_path, f"{os.path.basename(filename)}_{method}_{cutoff}_{seed}.trace")
+    if method in ['BnB', 'Approx']:
+        trace_filename = os.path.join(full_path, f"{os.path.basename(filename)}_{method}_{cutoff}.trace")
+    else:
+        trace_filename = os.path.join(full_path, f"{os.path.basename(filename)}_{method}_{cutoff}_{seed}.trace")
 
     # Write the solution file
     with open(trace_filename, 'w') as f:
