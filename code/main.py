@@ -3,7 +3,7 @@ import sys
 import argparse
 from utils.utils import load_dataset, save_solution, save_trace
 # from algorithms.branch_and_bound import BranchAndBound
-# from algorithms.approximation import ApproximationAlgorithm
+from algorithms.approximation import ApproximationAlgorithm
 from algorithms.local_search_1 import LocalSearch1
 # from algorithms.local_search_2 import LocalSearch2
 
@@ -35,7 +35,7 @@ def main():
 
     algorithms = {
         # 'BnB': BranchAndBound(items, capacity),
-        # 'Approx': ApproximationAlgorithm(items, capacity),
+        'Approx': ApproximationAlgorithm(items, capacity),
         'LS1': LocalSearch1(items, capacity, random_seed),
         # 'LS2': LocalSearch2(items, capacity, random_seed)
     }
