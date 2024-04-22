@@ -10,10 +10,10 @@ def load_dataset(filename):
     items = []
     with open(filename, 'r') as file:
 
-        num_items, capacity = map(int, file.readline().strip().split())
+        num_items, capacity = map(float, file.readline().strip().split())
         
-        for _ in range(num_items):
-            value, weight = map(int, file.readline().strip().split())
+        for _ in range(int(num_items)):
+            value, weight = map(float, file.readline().strip().split())
             items.append({'value': value, 'weight': weight})
 
     return items, capacity

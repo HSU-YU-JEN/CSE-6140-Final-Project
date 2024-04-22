@@ -62,10 +62,11 @@ if __name__ == "__main__":
 
 
 
-## Automatic test pipeline
+# # Automatic test pipeline
 
 # import os
 # import sys
+# import random
 # from utils.utils import load_dataset, save_solution, save_trace
 # from algorithms.local_search_1 import LocalSearch1
 # # Uncomment the below lines once you have the respective classes ready
@@ -76,20 +77,21 @@ if __name__ == "__main__":
 # def main():
 #     # Define the fixed parameters
 #     algorithm_choice = 'LS1'  # Example, can loop over different algorithms
-#     cut_off_time = 20  # Example cutoff time in seconds
+#     cut_off_time = 1800  # Example cutoff time in seconds
 #     dataset_base_path = 'large_scale/'
-#     num_seeds = 2
+#     num_seeds = 10
+
+#     seeds = [random.randint(1, 100) for _ in range(num_seeds)]
 
 #     # Create output directories if not exist
 #     os.makedirs(f"Output/solution_files/{algorithm_choice}", exist_ok=True)
 #     os.makedirs(f"Output/trace_files/{algorithm_choice}", exist_ok=True)
 
 #     # Loop over each dataset file
-#     for i in range(1, 2):  # Assuming files are named small_1 to small_10
+#     for i in range(4, 22):  # Assuming files are named small_1 to small_10
 #         dataset_path = f"{dataset_base_path}large_{i}"
 
-#         # Loop over each seed
-#         for seed in range(num_seeds):
+#         for seed in seeds:
 #             # Load dataset
 #             items, capacity = load_dataset(dataset_path)
 #             # Instantiate the algorithm
