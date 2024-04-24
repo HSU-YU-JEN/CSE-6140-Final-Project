@@ -58,19 +58,23 @@ class LocalSearch2:
                 best_global_value = current_value
                 best_global_weight = current_weight
                 trace.append((time.time() - start_time, current_value))  # Record initial best
-
-            while True:
+            
+            improving = True
+            while improving:
+                improving = False
                 new_solution, new_weight, new_value = self.find_best_neighbor(current_solution, current_weight, current_value)
                 if new_value > current_value and new_weight <= self.capacity:
                     current_solution = new_solution
                     current_weight = new_weight
                     current_value = new_value
+                    improving = True
+                    trace.append((time.time() - start_time, best_global_value))
                     # Append to trace only if this is a new best value for the global solution
                     if current_value > best_global_value:
                         best_global_solution = current_solution
                         best_global_value = current_value
                         best_global_weight = current_weight
-                        trace.append((time.time() - start_time, current_value))  # Record only improvements
+                          # Record only improvements
                 else:
                     break
 

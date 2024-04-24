@@ -29,8 +29,10 @@ class LocalSearch1:
         return chromosome
 
     def calculate_fitness(self, chromosome):
-        total_value = sum(self.items[i]['value'] for i in range(len(chromosome)) if chromosome[i] == 1)
-        return total_value
+        return sum(self.items[i]['value'] for i in range(len(chromosome)) if chromosome[i] == 1)
+         
+    def calculate_weight(self, chromosome):
+        return sum(self.items[i]['weight'] for i in range(len(chromosome)) if chromosome[i] == 1)
 
     def select_chromosomes(self, population):
         fitness_values = [self.calculate_fitness(chromosome) for chromosome in population]
@@ -50,9 +52,6 @@ class LocalSearch1:
         if self.calculate_weight(chromosome) <= self.capacity:
             return chromosome
         return self.generate_valid_chromosome()  # Regenerate if invalid
-
-    def calculate_weight(self, chromosome):
-        return sum(self.items[i]['weight'] for i in range(len(chromosome)) if chromosome[i] == 1)
 
     def mutate(self, chromosome):
         for i in range(len(chromosome)):
