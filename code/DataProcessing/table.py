@@ -1,10 +1,12 @@
 import os
 import numpy as np
+import re
 
 def read_solution_files(directory, prefix):
     max_values = []
+    pattern = re.compile(r"^{}(?:[._].*|)\.sol$".format(re.escape(prefix)))
     for filename in os.listdir(directory):
-        if filename.startswith(prefix) and filename.endswith(".sol"):
+        if pattern.match(filename):  # Use the regex pattern for matching
             with open(os.path.join(directory, filename), 'r') as file:
                 max_value = float(file.readline().strip())
                 max_values.append(max_value)
@@ -12,8 +14,9 @@ def read_solution_files(directory, prefix):
 
 def read_trace_files(directory, prefix):
     max_values_times = []
+    pattern = re.compile(r"^{}(?:[._].*|)\.trace$".format(re.escape(prefix)))
     for filename in os.listdir(directory):
-        if filename.startswith(prefix) and filename.endswith(".trace"):
+        if pattern.match(filename):
             with open(os.path.join(directory, filename), 'r') as file:
                 max_value = None
                 first_time_for_max = None
@@ -41,8 +44,8 @@ def find_prefixes(directory):
                 prefixes.add('_'.join(part[:2]))  # Adjust this depending on the specific format
     return prefixes
 
-solution_dir = 'Output/solution_files/LS2/small_scale/'  # Adjust the path as needed
-trace_dir = 'Output/trace_files/LS2/small_scale/'  # Adjust the path as needed
+solution_dir = 'Output/solution_files/LS1/large_scale/'  # Adjust the path as needed
+trace_dir = 'Output/trace_files/LS1/large_scale/'  # Adjust the path as needed
 
 solution_prefixes = find_prefixes(solution_dir)
 
@@ -54,10 +57,10 @@ for prefix in solution_prefixes:
 
     avg_max_value = read_solution_files(solution_files_path, prefix)
     if avg_max_value is not None:
-        print(f"Average maximum value for {prefix}: {avg_max_value}")
+        print(f"Average maximum value for {prefix}: {avg_max_value/3283122:.2f}")
         times_when_max_occurred = read_trace_files(trace_files_path, prefix)
         if times_when_max_occurred is not None:
-            print(f"Earliest time to reach max value for {prefix}: {times_when_max_occurred}")
+            print(f"Earliest time to reach max value for {prefix}: {times_when_max_occurred:.2f}")
         else:
             print(f"No max value found in the traces for {prefix}")
     else:

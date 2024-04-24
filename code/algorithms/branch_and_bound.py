@@ -36,7 +36,7 @@ class BranchAndBound:
         items = list(zip(values, weights))
         items_des = sorted(items, key=lambda x: x[0]/x[1], reverse=True)
         queue = deque([self.Node(-1, 0, 0, [0]*n)])
-        max_value = 0
+        max_value = 146888
         opt_items = []
         trace = []
         start_time = time.time()
