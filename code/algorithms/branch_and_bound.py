@@ -2,9 +2,10 @@ from collections import deque
 import time
 
 class BranchAndBound:
-    def __init__(self, items, capacity):
+    def __init__(self, items, capacity, max_value):
         self.items = items
         self.capacity = capacity
+        self.max_value = max_value
 
     class Node:
         def __init__(self, level, value, weight, items):
@@ -36,7 +37,7 @@ class BranchAndBound:
         items = list(zip(values, weights))
         items_des = sorted(items, key=lambda x: x[0]/x[1], reverse=True)
         queue = deque([self.Node(-1, 0, 0, [0]*n)])
-        max_value = 146888
+        max_value = 0
         opt_items = []
         trace = []
         start_time = time.time()

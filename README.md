@@ -1,5 +1,23 @@
 # CSE-6140-Final-Project
 Knapsack Problem
+## Code Structure
+
+Code/
+├── algorithms/
+│   ├── approximation.py
+│   ├── branch_and_bound.py
+│   ├── local_search_1.py
+│   └── local_search_2.py
+├── DataProcessing/
+│   ├── boxplot.py 
+│   ├── qrtd.py 
+│   ├── sqd.py 
+│   └── table.py "Comprehensive Table"
+├── utils/
+│   └── utils.py "Read the data, build Output Folder"
+├── main.py "Main Function"
+├── run_scripts.py "Design for Parallel Execution"
+└── README.md
 
 ## How to execuete
 To run the solver, navigate to the code directory and use the following command structure:
